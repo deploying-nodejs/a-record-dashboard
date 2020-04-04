@@ -1,0 +1,118 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A record dashboard</title>
+    <link href="https://fonts.googleapis.com/css?family=Poppins:400,500&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
+    <style>
+        * {
+            font-family: 'Inter Var';
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-sm">
+    <div class="w-full">
+        <div class="h-16 shadow flex items-center bg-gray-800">
+            <div class="container flex justify-between mx-auto px-4">
+                <span class="text-white uppercase">A record dashboard</span>
+            </div>
+        </div>
+
+        <div class="max-w-xl mx-auto mt-12 px-4">
+            <div class="bg-white px-4 py-5 border-b rounded-t-lg shadow border-gray-200 sm:px-6">
+                <div class="-ml-4 -mt-2 flex items-center justify-between flex-wrap sm:flex-no-wrap">
+                    <div class="ml-4 mt-2">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900">
+                          Create new A-record
+                        </h3>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-6 bg-white">
+                <form action="records" method="POST">
+                    @if(flashMessages.has('error'))
+                      <div class="bg-red-500 rounded w-full px-4 py-3 text-white mb-3">
+                          {{ flashMessages.get('error') }}
+                      </div>
+                    @endif
+                    @if(flashMessages.has('success'))
+                      <div class="bg-green-500 rounded w-full px-4 py-3 text-white mb-3">
+                          {{ flashMessages.get('success') }}
+                      </div>
+                    @endif
+                    <div class="w-full">
+                      <label for="email" class="block text-sm font-medium leading-5 text-gray-700">Email address</label>
+                      <small class="my-1 text-gray-600">This is the email you enrolled in the <a target="_blank" href="https://deployingnodejs.com">Deploying Node.js</a> course with.</small>
+                      <input id="email" name="email" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="{{ flashMessages.get('email') || '' }}" />
+                      @if(flashMessages.has('errors.email'))
+                        <span class="my-1 text-red-500 inline-block">
+                            {{ flashMessages.get('errors.email') }}
+                        </span>
+                      @endif
+                    </div>
+
+                      <div class="w-full mt-6">
+                        <label for="record" class="block text-sm font-medium leading-5 text-gray-700">A record</label>
+                        <small class="my-1 text-gray-600">Provide the value of the subdomain.</span> 
+                          <span class="hidden ml-1" id='result'>Your resulting domain would be <span class="font-semibold" id='domain'></span>
+                        </small>
+                        <input oninput="handleARecordChange(event)" name="record" id="record" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5" value="{{ flashMessages.get('record') || '' }}" />
+                        @if(flashMessages.has('errors.record'))
+                          <span class="my-1 text-red-500 inline-block">
+                              {{ flashMessages.get('errors.record') }}
+                          </span>
+                        @endif
+                      </div>
+
+                      <div class="w-full mt-6">
+                          <label for="ip" class="block text-sm font-medium leading-5 text-gray-700">IP address</label>
+                          <small class="my-1 text-gray-600">Provide the IP address this subdomain will point to.
+                          </small>
+                          <input id="ip" name="ip" class="mt-1 form-input block w-full py-2 px-3 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:shadow-outline-blue focus:border-blue-300 transition duration-150 ease-in-out sm:text-sm sm:leading-5"  value="{{ flashMessages.get('ip') || '' }}" />
+                          @if(flashMessages.has('errors.ip'))
+                            <span class="my-1 text-red-500 inline-block">
+                                {{ flashMessages.get('errors.ip') }}
+                            </span>
+                          @endif
+                        </div>
+
+                        <button type="submit" class="mt-6 w-full inline-flex justify-center py-2 px-4 border border-transparent text-sm leading-5 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-500 focus:outline-none focus:border-blue-700 focus:shadow-outline-blue active:bg-blue-700 transition duration-150 ease-in-out">
+                            Create A record
+                        </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+      function handleARecordChange(event) {
+        const input = document.getElementById('record')
+        const resultBox = document.getElementById('result')
+        const domainBox = document.getElementById('domain')
+
+        if (! input.value) {
+          resultBox.classList.add('hidden')
+          resultBox.classList.remove('block')
+
+          return
+        }
+
+        resultBox.classList.add('block')
+        resultBox.classList.remove('hidden')
+
+        domainBox.innerHTML = `${input.value}.deployingnodejs.com`
+      }
+
+
+      handleARecordChange()
+    </script>
+</body>
+
+</html>
