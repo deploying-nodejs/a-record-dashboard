@@ -51,7 +51,7 @@ export default class AppController {
 
         return client.domains.createRecord('deployingnodejs.com', {
             data: ip,
-            // type: 'A',
+            type: 'A',
             name: record
         })
     }
